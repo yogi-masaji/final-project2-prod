@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const UsersController = require('../controllers/users-controller');
-const authorizationUser = require('../middlewares/authorization-middleware');
+const {authorizationUser} = require('../middlewares/authorization-middleware');
 
 router.use('/:userId', authorizationUser);
 router.put('/:userId', UsersController.update);

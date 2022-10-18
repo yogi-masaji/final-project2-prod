@@ -61,4 +61,9 @@ async function authorizationSocialMedia(req, res, next){
     }
 }
 
-module.exports = authorizationUser, authorizationPhoto, authorizationComment, authorizationSocialMedia;
+module.exports = {
+    authorizationPhoto,
+    authorizationUser,
+    authorizationComment,
+    authorizationSocialMedia
+};
