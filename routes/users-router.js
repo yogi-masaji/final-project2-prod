@@ -1,10 +1,9 @@
 const router = require('express').Router();
 const UsersController = require('../controllers/users-controller');
+const authorizationUser = require('../middlewares/authorization-middleware');
 
-
-router.post('/register', UsersController.signUp);
-router.post('/login', UsersController.signIn);
-// router.put('/:userId', UsersController.update);
-// router.delete('/:userId', UsersController.delete);
+router.use('/:userId', authorizationUser);
+router.put('/:userId', UsersController.update);
+router.delete('/:userId', UsersController.delete);
 
 module.exports = router;

@@ -7,7 +7,17 @@ class UsersController {
         const { email, full_name, username, password, profile_image_url, age, phone_number } = req.body;
         const hashedPassword = hash(password);
         try {
-            const user = await User.create({email: email, full_name: full_name, username: username, password: hashedPassword, profile_image_url: profile_image_url, age: age, phone_number: phone_number});
+            const user = await User.create(
+                {
+                    email: email,
+                    full_name: full_name,
+                    username: username,
+                    password: hashedPassword,
+                    profile_image_url: profile_image_url,
+                    age: age,
+                    phone_number: phone_number
+                }
+            );
             res.status(201).json({
                 "user": {
                     "email": user.email,
@@ -19,7 +29,6 @@ class UsersController {
                 }
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     }
@@ -36,13 +45,49 @@ class UsersController {
             next(error);
         }
     }
-    static async update(){
-
+    static async update(req, res, next){
+        const { email, full_name, username, profile_image_url, age, phone_number } = req.body;
+        const { userId } = req.params;
+        try {
+            const user = await User.update(
+                {
+                    email: email,
+                    full_name: full_name,
+                    username: username,
+                    profile_image_url: profile_image_url,
+                    age: age,
+                    phone_number: phone_number
+                },
+                {
+                    where:{
+                        id: userId
+                    }
+                }
+            );
+            res.status(200).json({
+                "email": email,
+                "full_name": full_name,
+                "username": username,
+                "profile_image_url": profile_image_url,
+                "age": age,
+                "phone_number": phone_number
+            });
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
     }
-    static async delete(){
-
+    static async delete(req, res, next){
+        const { userId } = req.params;
+        try {
+            const user = await User.destroy({ where: { id: userId } });
+            res.status(200).json({
+                "message": "Your account has been successfully deleted"
+            });
+        } catch (error) {
+            next(error);
+        }
     }
-
 }
 
 module.exports = UsersController;
