@@ -10,27 +10,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       title: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       caption: {
-        allowNull: false,
         type: Sequelize.TEXT
       },
       poster_image_url: {
-        allowNull: false,
-        isUrl: true,
         type: Sequelize.TEXT
       },
       UserId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: {
-            tableName: 'Users'
-          },
-          key: 'id'
-        },
-        allowNull: false
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
