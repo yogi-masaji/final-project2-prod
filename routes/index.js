@@ -4,11 +4,11 @@ const authMiddleware = require('../middlewares/authentication-middleware');
 const errorMiddleware = require('../middlewares/error-middleware');
 const UsersController = require('../controllers/users-controller');
 
-router.post('/user/login', UsersController.signIn);
-router.post('/user/register', UsersController.signUp);
+router.post('/users/login', UsersController.signIn);
+router.post('/users/register', UsersController.signUp);
 
 router.use(authMiddleware);
-router.use('/user', userRouter);
+router.use('/users', userRouter);
 
 // router.use((req, res, next) => {
 //     next({ name: 'PageNotFound' });

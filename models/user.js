@@ -1,4 +1,3 @@
-const { Sequelize, Op, Model, DataTypes } = require("sequelize");
 
 const {Model} = require('sequelize');
 

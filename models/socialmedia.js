@@ -16,21 +16,21 @@ module.exports = (sequelize, DataTypes) => {
             name: {
                 type: DataTypes.STRING,
                 validate: {
-                    notEmpty:{
+                    notEmpty: {
                         args: true,
-                        msg: "Name tidak boleh kosong"
-                    }
-                }
+                        msg: 'Name tidak boleh kosong',
+                    },
+                },
             },
-            social_media_url:{ 
+            social_media_url: {
                 type: DataTypes.TEXT,
                 validate: {
                     notEmpty: {
                         args: true,
-                        msg: "Social Media URL tidak boleh kosong"
+                        msg: 'Social Media URL tidak boleh kosong',
                     },
-                    isUrl: true
-                }
+                    isUrl: true,
+                },
             },
             UserId: DataTypes.INTEGER,
         },
