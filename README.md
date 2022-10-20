@@ -15,7 +15,7 @@
 -ada 4 function authorization: user, photo, comment, socialmedia
 
 -cara pakai (Contoh)
-1. `const authorizationUser = require('../middlewares/authorization-middleware');` Untuk import
+1. `const {authorizationUser} = require('../middlewares/authorization-middleware');` Untuk import
 2. `router.use('/:userId', authorizationUser);` untuk route
 
 **List Endpoint:**
