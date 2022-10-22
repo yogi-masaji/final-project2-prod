@@ -73,7 +73,6 @@ class UsersController {
                 "phone_number": phone_number
             });
         } catch (error) {
-            console.log(error);
             next(error);
         }
     }

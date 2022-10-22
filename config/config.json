@@ -1,6 +1,6 @@
 {
   "development": {
-    "username": "postgres",
+    "username": "root",
     "password": "root",
     "database": "mygram_db",
     "host": "127.0.0.1",
