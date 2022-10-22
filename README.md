@@ -26,3 +26,17 @@ request body email, password
 3. PUT `user/:id` 
 dengan request body email, full_name, username, profile_image_url, age, phone_number
 4. DELETE `user/:id`
+
+5. POST `/photos`
+dengan request body `poster_image_url, title, caption`
+6. GET `/photos`
+7. PUT `photos/:id` 
+dengan request body `poster_image_url, title, caption`
+8. DELETE `photos/:id`
+
+9. POST `/comments`
+dengan request body `comment, PhotoId`
+10. GET `/comments`
+11. PUT `comments/:id` 
+dengan request body `comment, PhotoId`
+12. DELETE `comments/:id`
