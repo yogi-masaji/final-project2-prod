@@ -34,9 +34,9 @@ async function authorizationComment(req, res, next){
     const { commentId } = req.params;
     const authUser = req.user.id;
     try {
-        const comment = Comment.findOne({ where : { id: commentId } });
+        const comment = await Comment.findOne({ where : { id: commentId } });
         if(!comment) throw { name: 'ErrNotFound'};
-        if(comment.userId === authUser){
+        if(comment.UserId === authUser){
             return next();
         }else{
             throw { name: 'Unauthorized' };
