@@ -19,9 +19,9 @@ async function authorizationPhoto(req, res, next){
     const { photoId } = req.params;
     const authUser = req.user.id;
     try {
-        const photo = Photo.findOne({ where : { id: photoId } });
+        const photo = await Photo.findOne({ where: { id: photoId } });
         if(!photo) throw { name: 'ErrNotFound'};
-        if(photo.userId === authUser){
+        if(photo.UserId === authUser){
             return next();
         }else{
             throw { name: 'Unauthorized' };
