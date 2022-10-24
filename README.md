@@ -40,3 +40,10 @@ dengan request body `comment, PhotoId`
 11. PUT `comments/:id` 
 dengan request body `comment, PhotoId`
 12. DELETE `comments/:id`
+
+13. POST `/socialmedias`
+dengan request body `name, social_media_url`
+14. GET `/socialmedias`
+15. put `/socialmedias/:id`
+dengan request body `name, social_media_url`
+16. GET `/socialmedias/:id`
