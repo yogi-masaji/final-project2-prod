@@ -2,6 +2,7 @@ const router = require('express').Router();
 const userRouter = require('./users-router');
 const photosRouter = require('./photos-router');
 const commentsRouter = require('./comments-router');
+const socialmediasRouter = require('./socialmedias-router');
 
 const authMiddleware = require('../middlewares/authentication-middleware');
 const errorMiddleware = require('../middlewares/error-middleware');
@@ -15,7 +16,7 @@ router.use(authMiddleware);
 router.use('/users', userRouter);
 router.use('/photos', photosRouter);
 router.use('/comments', commentsRouter);
-
+router.use('/socialmedias', socialmediasRouter);
 
 router.use(errorMiddleware);
 
