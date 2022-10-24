@@ -1,4 +1,4 @@
-const { User, Photo, Comment, Socialmedia } = require('../models/index');
+const { User, Photo, Comment, SocialMedia } = require('../models/index');
 
 async function authorizationUser(req, res, next){
     const { userId } = req.params;
@@ -45,13 +45,14 @@ async function authorizationComment(req, res, next){
         next(error);
     }
 }
+
 async function authorizationSocialMedia(req, res, next){
     const { socialMediaId } = req.params;
     const authUser = req.user.id;
     try {
-        const socialMedia = Socialmedia.findOne({ where : { id: socialMediaId } });
-        if(!socialMedia) throw { name: 'ErrNotFound'};
-        if(socialMedia.userId === authUser){
+        const socialmedia = await SocialMedia.findOne({ where : { id: socialMediaId } });
+        if(!socialmedia) throw { name: 'ErrNotFound'};
+        if(socialmedia.UserId === authUser){
             return next();
         }else{
             throw { name: 'Unauthorized' };

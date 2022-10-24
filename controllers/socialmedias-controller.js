@@ -37,7 +37,27 @@ class SocialmediasController {
         }
     }
     
-    
+    static async delete(req, res, next) {
+        const socialMediaID = req.params.socialMediaId;
+        try {
+            const socialmedia = await SocialMedia.destroy({ where: { id: socialMediaID } });
+            res.status(200).json({ "message": "your social Media has been successfully deleted" })
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    static async update(req, res, next) {
+        const socialMediaID = req.params.socialMediaId;
+        const {name, social_media_url} = req.body;
+        try {
+            const socialmedia = await SocialMedia.update({ name, social_media_url }, { where: { id: socialMediaID }, returning: true });
+            res.status(200).json({ "socialmedia" : socialmedia[1][0]})
+        } catch (err) {
+            next(err)
+        }
+    }
+
 }
 
 module.exports = SocialmediasController;
