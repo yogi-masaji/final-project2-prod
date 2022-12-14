@@ -13,7 +13,6 @@ async function authenticationMiddleware(req, res, next) {
     req.user = { id, email };
     next();
   } catch (error) {
-    console.log(error);
     next(error);
   }
 }
