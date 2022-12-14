@@ -26,15 +26,25 @@ const defaultPhoto = {
     createdAt: new Date(),
     updatedAt: new Date()
 };
+
 const defaultComment = {
-    comment : 'komen',
-    PhotoId: 1
-}
+    comment: 'Default Comment',
+    PhotoId : 1,
+    UserId: 1,
+    createdAt: new Date(),
+    updatedAt: new Date()
+};
+
 beforeAll(async () => {
-    await queryInterface.bulkDelete('Photos', null, {
+    await queryInterface.bulkDelete('Comments', null, {
         truncate: true,
         restartIdentity: true,
         cascade: true
+      });
+    await queryInterface.bulkDelete('Photos', null, {
+      truncate: true,
+      restartIdentity: true,
+      cascade: true
     });
     await queryInterface.bulkDelete('Users', null, {
       truncate: true,
@@ -45,42 +55,31 @@ beforeAll(async () => {
     hashedUser.password = hash(hashedUser.password);
     await queryInterface.bulkInsert('Users', [hashedUser]);
     await queryInterface.bulkInsert('Photos', [defaultPhoto]);
+    await queryInterface.bulkInsert('Comments', [defaultComment]);
 });
+
 const userToken = sign({ id: 1, email: userTest.email });
 afterAll(async () => {
     sequelize.close();
 });
 
-describe('POST /comments', () => {
-    test('Should return HTTP code 201 when create comment success', async () => {
+describe('GET /comments', () => {
+    test('Should return HTTP code 200 when get comment success', async () => {
         const { _body } = await request(app)
-        .post('/comments')
+        .get('/comments')
         .set('Authorization', `Bearer ${userToken}`)
-        .send({
-            comment: defaultComment.comment,
-            PhotoId: defaultComment.PhotoId
-        })
-        .expect(201);
-        const {comment} = _body;
-        expect(comment).toBeTruthy();
-        expect(comment).toBeDefined();
-        expect(comment).toEqual({
-            id: expect.anything(),
-            comment: defaultComment.comment,
-            PhotoId : defaultComment.PhotoId,
-            UserId: expect.anything(),
-            createdAt: expect.anything(),
-            updatedAt: expect.anything()
-        });
+        .expect(200);
+        const { comments } = _body;
+        expect(comments).toBeTruthy();
+        expect(comments).toBeDefined();
+        expect(comments[0]).toHaveProperty('UserId');
+        expect(comments[0]).toHaveProperty('comment');
+        expect(comments[0]).toHaveProperty('Photo');
     });
 
-    test('Should return HTTP code 401 when insert comment without JWT', async() => {
-        const {_body} = await request(app)
-        .post('/comments')
-        .send({
-            comment: defaultComment.comment,
-            PhotoId: defaultComment.PhotoId
-        })
+    test('Should return HTTP code 401 when get comment without JWT', async() => {
+        const { _body } = await request(app)
+        .get('/comments')
         .expect(401);
         const {message} = _body;
         expect(message).toBeTruthy();
@@ -89,14 +88,10 @@ describe('POST /comments', () => {
         expect(message).toMatch(/unauthorized/i);
     });
 
-    test('Should return HTTP code 401 when create commment without exist JWT', async() => {
+    test('Should return HTTP code 401 when get comment without exist JWT', async() => {
         const { _body } = await request(app)
-        .post('/comments')
+        .get('/comments')
         .set('Authorization', `Bearer Wrong Token`)
-        .send({
-            comment: defaultComment.comment,
-            PhotoId: defaultComment.PhotoId
-        })
         .expect(401);
         const {message} = _body;
         expect(message).toBeTruthy();

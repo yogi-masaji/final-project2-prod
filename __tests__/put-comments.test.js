@@ -18,6 +18,11 @@ const userTest = {
     updatedAt: new Date()
 };
 
+const updateComment = {
+    comment: 'Update Comment',
+    PhotoId : 1
+};
+
 const defaultPhoto = {
     title: 'Default Photo',
     caption: 'Default Photo caption',
@@ -26,15 +31,25 @@ const defaultPhoto = {
     createdAt: new Date(),
     updatedAt: new Date()
 };
+
 const defaultComment = {
-    comment : 'komen',
-    PhotoId: 1
-}
+    comment: 'Default Comment',
+    PhotoId : 1,
+    UserId: 1,
+    createdAt: new Date(),
+    updatedAt: new Date()
+};
+
 beforeAll(async () => {
-    await queryInterface.bulkDelete('Photos', null, {
+    await queryInterface.bulkDelete('Comments', null, {
         truncate: true,
         restartIdentity: true,
         cascade: true
+      });
+    await queryInterface.bulkDelete('Photos', null, {
+      truncate: true,
+      restartIdentity: true,
+      cascade: true
     });
     await queryInterface.bulkDelete('Users', null, {
       truncate: true,
@@ -45,57 +60,42 @@ beforeAll(async () => {
     hashedUser.password = hash(hashedUser.password);
     await queryInterface.bulkInsert('Users', [hashedUser]);
     await queryInterface.bulkInsert('Photos', [defaultPhoto]);
+    await queryInterface.bulkInsert('Comments', [defaultComment]);
 });
+
 const userToken = sign({ id: 1, email: userTest.email });
 afterAll(async () => {
     sequelize.close();
 });
 
-describe('POST /comments', () => {
-    test('Should return HTTP code 201 when create comment success', async () => {
+describe('PUT /comments/:commentId', () => {
+    test('Should return HTTP code 200 when update user data photo', async() => {
         const { _body } = await request(app)
-        .post('/comments')
+        .put('/comments/'+1)
         .set('Authorization', `Bearer ${userToken}`)
         .send({
-            comment: defaultComment.comment,
-            PhotoId: defaultComment.PhotoId
+            comment: updateComment.comment,
         })
-        .expect(201);
-        const {comment} = _body;
+        .expect(200);
+        const { comment} = _body;
         expect(comment).toBeTruthy();
         expect(comment).toBeDefined();
         expect(comment).toEqual({
             id: expect.anything(),
-            comment: defaultComment.comment,
-            PhotoId : defaultComment.PhotoId,
             UserId: expect.anything(),
+            PhotoId: expect.anything(),
+            comment: updateComment.comment,
             createdAt: expect.anything(),
             updatedAt: expect.anything()
         });
     });
 
-    test('Should return HTTP code 401 when insert comment without JWT', async() => {
-        const {_body} = await request(app)
-        .post('/comments')
-        .send({
-            comment: defaultComment.comment,
-            PhotoId: defaultComment.PhotoId
-        })
-        .expect(401);
-        const {message} = _body;
-        expect(message).toBeTruthy();
-        expect(message).toBeDefined();
-        expect(message).toEqual(expect.anything());
-        expect(message).toMatch(/unauthorized/i);
-    });
-
-    test('Should return HTTP code 401 when create commment without exist JWT', async() => {
+    test('Should return HTTP code 401 when edit commment without exist JWT', async() => {
         const { _body } = await request(app)
-        .post('/comments')
+        .put('/comments/'+1)
         .set('Authorization', `Bearer Wrong Token`)
         .send({
             comment: defaultComment.comment,
-            PhotoId: defaultComment.PhotoId
         })
         .expect(401);
         const {message} = _body;
@@ -103,5 +103,19 @@ describe('POST /comments', () => {
         expect(message).toBeDefined();
         expect(message).toEqual(expect.anything());
         expect(message).toMatch(/invalid token/i);
+    });
+
+    test('Should return HTTP code 401 when edit comment without JWT', async() => {
+        const {_body} = await request(app)
+        .put('/comments'+1)
+        .send({
+            comment: defaultComment.comment,
+        })
+        .expect(401);
+        const {message} = _body;
+        expect(message).toBeTruthy();
+        expect(message).toBeDefined();
+        expect(message).toEqual(expect.anything());
+        expect(message).toMatch(/unauthorized/i);
     });
 });
